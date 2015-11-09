@@ -1,6 +1,6 @@
 {
-  "name": "nuxeo-travel-expenses",
-  "version": "0.2.0",
+  "name": "daimler-direct-deposit",
+  "version": "0.1.0",
   "dependencies": {
     "polymer": "Polymer/polymer#^1.1.4",
     "iron-elements": "PolymerElements/iron-elements#^1.0.4",

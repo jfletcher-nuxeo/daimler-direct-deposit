@@ -1,4 +1,4 @@
-# About Nuxeo Travel Expenses Sample
+# About Daimler Direct Deposit Demo
 
 This sample demonstrates usage of the Workflow REST API.
 
@@ -15,19 +15,15 @@ Building this sample requires the following software:
 - [Node.js] (http://nodejs.org)
 - [Bower] (http://bower.io)
 
-## QA
-
-[![Build Status](https://qa.nuxeo.org/jenkins/buildStatus/icon?job=addons_nuxeo-travel-expenses-master)](https://qa.nuxeo.org/jenkins/job/addons_nuxeo-travel-expenses-master/)
-
 ## Deploying
 
-Copy JAR bundle into `$NUXEO_HOME/templates/custom/bundles/` and activate the `custom` template.
+Copy JAR file into `$NUXEO_HOME/nxserver/plugins/`.
 
 # Resources
 
 ## Reporting issues
 
-https://jira.nuxeo.com/browse/NXP/component/10170
+Contact [jfletcher@nuxeo.com](mailto:jfletcher@nuxeo.com)
 
 # Licensing
 

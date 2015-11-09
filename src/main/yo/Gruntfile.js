@@ -19,7 +19,7 @@ module.exports = function (grunt) {
   // configurable paths
   var yeomanConfig = {
     app: 'app',
-    dist: '../../../target/classes/web/nuxeo.war/travel-expenses'
+    dist: '../../../target/classes/web/nuxeo.war/direct-deposit'
   };
 
   grunt.initConfig({
@@ -27,7 +27,9 @@ module.exports = function (grunt) {
     watch: {
       options: {
         nospawn: true,
-        livereload: { liveCSS: false }
+        livereload: {
+          liveCSS: false
+        }
       },
       livereload: {
         options: {
@@ -93,7 +95,9 @@ module.exports = function (grunt) {
           middleware: function () {
             return [
               require('grunt-connect-proxy/lib/utils').proxyRequest,
-              require('connect-livereload')({port: LIVERELOAD_PORT}),
+              require('connect-livereload')({
+                port: LIVERELOAD_PORT
+              }),
               mountFolder('.tmp'),
               mountFolder(yeomanConfig.app)
             ];
@@ -132,7 +136,9 @@ module.exports = function (grunt) {
     clean: {
       dist: ['.tmp', '<%= yeoman.dist %>/*'],
       server: '.tmp',
-      options: { force: true }
+      options: {
+        force: true
+      }
     },
     jshint: {
       options: {

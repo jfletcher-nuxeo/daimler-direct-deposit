@@ -1,6 +1,6 @@
 {
-  "name": "nuxeo-travel-expenses",
-  "version": "0.2.0",
+  "name": "daimler-direct-deposit",
+  "version": "0.1.0",
   "dependencies": {},
   "devDependencies": {
     "connect-livereload": "^0.5.3",
