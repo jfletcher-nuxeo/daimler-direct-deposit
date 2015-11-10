@@ -24,9 +24,10 @@
           <template>
             <paper-item class="item" on-tap="select">
               <paper-item-body two-line>
-                <div>
+                <div class="task-row">
                   <iron-icon icon="assignment"></iron-icon>
-                  <span>Task: [[i18n(item.name)]]</span><span>Department: [[item.variables.department]]</span>
+                  <div class="task-name">Task: [[i18n(item.name)]]</div>
+                  <div class="task-subject">Account Type: [[item.variables.department]]</div>
                 </div>
                 <div secondary>
                   <iron-icon icon="schedule"></iron-icon>
