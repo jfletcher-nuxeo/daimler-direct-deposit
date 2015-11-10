@@ -15,3 +15,12 @@ paper-fab {
   bottom: 10px;
   position: absolute;
 }
+
+.task-row {
+  /* layout properties for a local DOM element */
+  @apply(--layout-horizontal);
+}
+
+.task-subject {
+  margin-left: 50px;
+}
