@@ -26,11 +26,11 @@
               <paper-item-body two-line>
                 <div>
                   <iron-icon icon="assignment"></iron-icon>
-                  <span>[[i18n(item.name)]]</span>
+                  <span>Task: [[i18n(item.name)]]</span><span>Department: [[item.variables.department]]</span>
                 </div>
                 <div secondary>
                   <iron-icon icon="schedule"></iron-icon>
-                  <span>[[formatDate(item.dueDate)]]</span>
+                  <span>Due Date: [[formatDate(item.dueDate)]]</span>
                 </div>
               </paper-item-body>
               <paper-icon-button icon="delete" on-tap="deleteWorkflow"></paper-icon-button>
@@ -104,7 +104,7 @@
       },
 
       // TODO : check if there's a fix for databinding to a content selector
-      taskSelector: function(task) {
+      taskSelector: function (task) {
         return (task) ? '.' + task.nodeName : '';
       },
 
@@ -162,7 +162,7 @@
       },
 
       workflowInstanceChanged: function (workflowInstance) {
-        this.$.workflow.path =  '/workflow/' + ((workflowInstance.id) ? workflowInstance.id : '');
+        this.$.workflow.path = '/workflow/' + ((workflowInstance.id) ? workflowInstance.id : '');
         this.$.workflowTasks.params = {
           workflowInstanceId: workflowInstance.id
         };
