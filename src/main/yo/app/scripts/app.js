@@ -12,7 +12,7 @@
  * Lesser General Public License for more details.
  */
 
-(function(document) {
+(function (document) {
   'use strict';
 
   var TASKS = {
@@ -26,9 +26,9 @@
   app.task = null;
 
   app.toolbarTitle = function (task) {
-    return task ? task.name : 'Travel Expenses';
+    return task ? task.name : 'Direct Deposit Request';
   };
-  app.toolbarIcon = function(task) {
+  app.toolbarIcon = function (task) {
     return task ? 'arrow-back' : 'menu';
   };
   app.back = function () {
@@ -42,32 +42,32 @@
     return task && TASKS[key] === task.nodeName;
   };
 
-  HTMLImports.whenReady(function() {
+  HTMLImports.whenReady(function () {
     app.formatDate = Polymer.Base.formatDate = function (str) {
       return (str) ? new Date(str).toLocaleString() : '';
     };
 
     app.i18n = Polymer.Base.i18n = function (key) {
       return {
-          'wf.actors': 'Actors',
-          'wf.dueDate': 'Due date',
-          'wf.directive': 'Directive,',
-          'wf.travelExpenseValidation': 'Travel expense validation',
-          'wf.travelExpenses.create': 'Create expense',
-          'wf.travelExpenses.validate': 'Validate expense',
-          'wf.travelExpenses.accountancy': 'Account for expense',
-          'wf.travelExpenses.submitExpense': 'Submit for validation',
-          'wf.travelExpenses.customerCode': 'Set customer code',
-          'wf.travelExpenses.submit': 'Submit',
-          'wf.travelExpenses.cancel': 'Cancel',
-          'wf.travelExpenses.done': 'Done',
-          'wf.travelExpenses.label': 'Label',
-          'wf.travelExpenses.amount': 'Amount',
-          'wf.travelExpenses.description': 'Description',
-          'wf.travelExpenses.nature': 'Nature',
-          'wf.travelExpenses.department': 'Department',
-          'wf.travelExpenses.file': 'File'
-        }[key] || key;
+        'wf.actors': 'Actors',
+        'wf.dueDate': 'Due date',
+        'wf.directive': 'Directive,',
+        'wf.travelExpenseValidation': 'Travel expense validation',
+        'wf.travelExpenses.create': 'New request',
+        'wf.travelExpenses.validate': 'Validate expense',
+        'wf.travelExpenses.accountancy': 'Account for expense',
+        'wf.travelExpenses.submitExpense': 'Submit for validation',
+        'wf.travelExpenses.customerCode': 'Set customer code',
+        'wf.travelExpenses.submit': 'Submit',
+        'wf.travelExpenses.cancel': 'Cancel',
+        'wf.travelExpenses.done': 'Done',
+        'wf.travelExpenses.label': 'Label',
+        'wf.travelExpenses.amount': 'Amount',
+        'wf.travelExpenses.description': 'Description',
+        'wf.travelExpenses.nature': 'Nature',
+        'wf.travelExpenses.department': 'Department',
+        'wf.travelExpenses.file': 'File'
+      }[key] || key;
     };
   });
 
