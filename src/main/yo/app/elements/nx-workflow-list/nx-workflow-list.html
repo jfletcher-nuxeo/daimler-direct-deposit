@@ -15,7 +15,8 @@
         <template>
           <paper-icon-item class="item">
             <iron-icon icon="group-work" item-icon></iron-icon>
-            <span class="flex">[[i18n(item.title)]]</span>
+            <span>[[i18n(item.title)]]</span>
+            <span class="flex workflow-initiator">[[item.initiator]]</span>
             <div class="state">[[item.state]]</div>
             <paper-icon-button icon="delete" style="float:right" on-tap="deleteWorkflow"></paper-icon-button>
           </paper-icon-item>
@@ -43,7 +44,9 @@
           type: String,
           notify: true
         },
-        workflows: { value: [] }
+        workflows: {
+          value: []
+        }
       },
 
       ready: function () {
@@ -65,14 +68,14 @@
           .then(function (response) {
             this.$.createdMessage.show();
             this.updateWorkflows();
-        }.bind(this));
+          }.bind(this));
       },
 
       updateWorkflows: function () {
         this.workflow = null;
         this.$.workflow.get().then(function (data) {
-          this.workflows = data.entries;
-        }.bind(this))
+            this.workflows = data.entries;
+          }.bind(this))
           .catch(function (e) {
             console.debug(e);
           });
