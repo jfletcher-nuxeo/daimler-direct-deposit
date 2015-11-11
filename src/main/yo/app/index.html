@@ -58,7 +58,7 @@
         <paper-icon-button icon="refresh" on-tap="refresh"></paper-icon-button>
         <paper-tabs selected="{{selectedTab}}" valueattr="path" class="fit bottom">
           <paper-tab>NEW REQUESTS</paper-tab>
-          <paper-tab>PENDING REQUESTS</paper-tab>
+          <paper-tab>SUBMITTED REQUESTS</paper-tab>
         </paper-tabs>
       </paper-toolbar>
 
@@ -73,6 +73,7 @@
             <!-- Account Type -->
             <div item>
               <iron-icon icon="account-balance" item-icon></iron-icon>
+              <span>Account Type:</span>
               <select value="{{task.variables.account-type::change}}">
                 <option value="checking">Checking</option>
                 <option value="savings">Savings</option>
@@ -81,36 +82,61 @@
             <!-- Routing Number -->
             <div item>
               <iron-icon icon="label" item-icon></iron-icon>
-              <input is="iron-input" bind-value="{{task.variables.routing-number}}" placeholder="123456789" required>
+              <span>Routing Number:</span>
+              <input class="accountNumber" is="iron-input" bind-value="{{task.variables.routing-number}}" placeholder="123456789" prevent-invalid-input allowed-pattern="[0-9]" required>
+              <section onclick="clickHandler(event)">
+                <paper-button data-dialog="animated">help</paper-button>
+                <paper-dialog id="animated" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                  <h2>Check Sample</h2>
+                  <div class="checkImage"><img src="images/check.png"></div>
+                </paper-dialog>
+              </section>
             </div>
             <!-- Account Number -->
             <div item>
-              <iron-icon icon="account-balance-wallet" item-icon></iron-icon>
-              <input is="iron-input" bind-value="{{task.variables.account-number}}" placeholder="0123456789" required>
+              <iron-icon icon="label" item-icon></iron-icon>
+              <span>Account Number:</span>
+              <input class="accountNumber" is="iron-input" bind-value="{{task.variables.account-number}}" placeholder="0123456789" prevent-invalid-input allowed-pattern="[0-9]" required>
+              <section onclick="clickHandler(event)">
+                <paper-button data-dialog="animated">help</paper-button>
+                <paper-dialog id="animated" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                  <h2>Check Sample</h2>
+                  <img src="images/check.png">
+                </paper-dialog>
+              </section>
             </div>
             <!-- Deposit Type -->
             <div item>
-              <iron-icon icon="label" item-icon></iron-icon>
+              <iron-icon icon="a" item-icon></iron-icon>
+              <span>Deposit Type:</span>
               <select value="{{task.variables.deposit-type::change}}">
                 <option value="balance">Balance</option>
                 <option value="amount">Amount</option>
                 <option value="percent">Percentage</option>
               </select>
             </div>
-            <!-- Amount -->
-            <div item>
-              <iron-icon icon="label" item-icon></iron-icon>
-              <template is="dom-if" if="[[isMatch('amount',task.variables.deposit-type)]]">
+            <!-- Amount - $ -->
+            <template is="dom-if" if="[[isMatch('amount',task.variables.deposit-type)]]">
+              <div item>
+                <iron-icon icon="account-balance-wallet" item-icon></iron-icon>
+                <span>Amount:</span>
                 <label>$</label>
                 <input is="iron-input" bind-value="{{task.variables.amount}}" type="number" step="0.01" required>
-              </template>
-              <template is="dom-if" if="[[isMatch('percent',task.variables.deposit-type)]]">
-                <input is="iron-input" bind-value="{{task.variables.amount}}" type="number" required>
+              </div>
+            </template>
+            <!-- Amount - % -->
+            <template is="dom-if" if="[[isMatch('percent',task.variables.deposit-type)]]">
+              <div item>
+                <iron-icon icon="label" item-icon></iron-icon>
+                <span>Amount:</span>
+                <input class="percentage" is="iron-input" bind-value="{{task.variables.amount}}" type="number" required>
                 <label>%</label>
-              </template>
-            </div>
+              </div>
+            </template>
+            <!-- Attachment -->
             <div item>
               <iron-icon icon="attachment" item-icon></iron-icon>
+              <span>Attachment:</span>
               <nuxeo-file value="{{task.variables.attachment}}"></nuxeo-file>
             </div>
           </template>
@@ -199,6 +225,23 @@
   <script src="scripts/app.js"></script>
   <!-- endbuild-->
 
+
+  <script>
+    function clickHandler(e) {
+      var button = e.target;
+      while (!button.hasAttribute('data-dialog') && button !== document.body) {
+        button = button.parentElement;
+      }
+      if (!button.hasAttribute('data-dialog')) {
+        return;
+      }
+      var id = button.getAttribute('data-dialog');
+      var dialog = document.getElementById(id);
+      if (dialog) {
+        dialog.open();
+      }
+    }
+  </script>
 </body>
 
 </html>
