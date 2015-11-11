@@ -9,6 +9,11 @@
 
     <div>
 
+      <paper-icon-item class="field directive">
+        <iron-icon icon="flag" title="[[i18n('wf.directive')]]" item-icon></iron-icon>
+        <span>[[i18n(task.directive)]]</span>
+      </paper-icon-item>
+
       <content></content>
 
       <paper-icon-item class="field actors">
@@ -25,10 +30,7 @@
         <span>[[formatDate(task.dueDate)]]</span>
       </paper-icon-item>
 
-      <paper-icon-item class="field directive">
-        <iron-icon icon="flag" title="[[i18n('wf.directive')]]" item-icon></iron-icon>
-        <span>[[i18n(task.directive)]]</span>
-      </paper-icon-item>
+
 
     </div>
 
@@ -46,7 +48,11 @@
     Polymer({
       is: 'nx-task',
 
-      properties: { task: { notify: true } },
+      properties: {
+        task: {
+          notify: true
+        }
+      },
 
       callAction: function (event) {
         this.action = event.model.action.name;
