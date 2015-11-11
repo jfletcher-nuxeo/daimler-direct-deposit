@@ -1,3 +1,19 @@
+<!--
+(C) Copyright 2015 Nuxeo SA (http://nuxeo.com/) and contributors.
+
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the GNU Lesser General Public License
+(LGPL) version 2.1 which accompanies this distribution, and is available at
+http://www.gnu.org/licenses/lgpl.html
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+
+Contributors:
+  Josh Fletcher <jfletcher@nuxeo.com>
+-->
 <!doctype html>
 <html lang="">
 
@@ -9,7 +25,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#03a9f4">
 
-  <title>Nuxeo Travel Expenses</title>
+  <title>Daimler Direct Deposit Request</title>
 
   <link rel="icon" sizes="192x192" href="icon.png">
 
@@ -58,124 +74,98 @@
         <paper-icon-button icon="refresh" on-tap="refresh"></paper-icon-button>
         <paper-tabs selected="{{selectedTab}}" valueattr="path" class="fit bottom">
           <paper-tab>NEW REQUESTS</paper-tab>
-          <paper-tab>PENDING REQUESTS</paper-tab>
+          <paper-tab>SUBMITTED REQUESTS</paper-tab>
         </paper-tabs>
       </paper-toolbar>
 
       <iron-pages selected="[[selectedTab]]">
 
         <!-- Task List -->
-        <nx-task-list class="fit" workflow-model="TravelExpenseValidation" task="{{task}}">
+        <nx-task-list class="fit" workflow-model="EMDirectDepositRequest" task="{{task}}">
+
 
           <!-- Create -->
           <template is="dom-if" if="[[isStep('create',task)]]">
+            <!-- Account Type -->
+            <div item>
+              <iron-icon icon="account-balance" item-icon></iron-icon>
+              <span>Account Type:</span>
+              <select value="{{task.variables.account-type::change}}">
+                <option value="checking">Checking</option>
+                <option value="savings">Savings</option>
+              </select>
+            </div>
+            <!-- Routing Number -->
             <div item>
               <iron-icon icon="label" item-icon></iron-icon>
-              <input is="iron-input" bind-value="{{task.variables.label}}" placeholder="[[i18n('wf.travelExpenses.label')]]" required>
+              <span>Routing Number:</span>
+              <input class="accountNumber" is="iron-input" bind-value="{{task.variables.routing-number}}" placeholder="123456789" prevent-invalid-input allowed-pattern="[0-9]" required>
+              <section onclick="clickHandler(event)">
+                <paper-button data-dialog="animated">help</paper-button>
+                <paper-dialog id="animated" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                  <h2>Check Sample</h2>
+                  <div class="checkImage"><img src="images/check.png"></div>
+                </paper-dialog>
+              </section>
             </div>
+            <!-- Account Number -->
             <div item>
-              <iron-icon icon="credit-card" item-icon></iron-icon>
-              <input is="iron-input" bind-value="{{task.variables.amount}}" type="number" step="0.01" required>
-              <label>&euro;</label>
+              <iron-icon icon="label" item-icon></iron-icon>
+              <span>Account Number:</span>
+              <input class="accountNumber" is="iron-input" bind-value="{{task.variables.account-number}}" placeholder="0123456789" prevent-invalid-input allowed-pattern="[0-9]" required>
+              <section onclick="clickHandler(event)">
+                <paper-button data-dialog="animated">help</paper-button>
+                <paper-dialog id="animated" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+                  <h2>Check Sample</h2>
+                  <img src="images/check.png">
+                </paper-dialog>
+              </section>
             </div>
+            <!-- Deposit Type -->
             <div item>
-              <iron-icon icon="description" item-icon></iron-icon>
-              <input is="iron-input" bind-value="{{task.variables.description}}" placeholder="[[i18n('wf.travelExpenses.description')]]" required>
-            </div>
-            <div item>
-              <iron-icon icon="work" item-icon></iron-icon>
-              <select value="{{task.variables.department::change}}">
-                <option value="it">IT</option>
-                <option value="financial">Financial</option>
-                <option value="marketing">Marketing</option>
-                <option value="hr">HR</option>
-                <option value="sales">Sales</option>
-                <option value="other">Other</option>
+              <iron-icon icon="a" item-icon></iron-icon>
+              <span>Deposit Type:</span>
+              <select value="{{task.variables.deposit-type::change}}">
+                <option value="balance">Balance</option>
+                <option value="amount">Amount</option>
+                <option value="percent">Percentage</option>
               </select>
             </div>
-            <div item>
-              <iron-icon icon="store" item-icon></iron-icon>
-              <select value="{{task.variables.expensenature::change}}">
-                <option value="transportation">Transportation</option>
-                <option value="lunch">Lunch</option>
-                <option value="hotel">Hotel</option>
-              </select>
-            </div>
+            <!-- Amount - $ -->
+            <template is="dom-if" if="[[isMatch('amount',task.variables.deposit-type)]]">
+              <div item>
+                <iron-icon icon="account-balance-wallet" item-icon></iron-icon>
+                <span>Amount:</span>
+                <label>$</label>
+                <input is="iron-input" bind-value="{{task.variables.deposit-amount}}" prevent-invalid-input allowed-pattern="[0-9]" required>
+              </div>
+            </template>
+            <!-- Amount - % -->
+            <template is="dom-if" if="[[isMatch('percent',task.variables.deposit-type)]]">
+              <div item>
+                <iron-icon icon="label" item-icon></iron-icon>
+                <span>Amount:</span>
+                <input class="percentage" is="iron-input" bind-value="{{task.variables.deposit-amount}}" prevent-invalid-input allowed-pattern="[0-9]" required>
+                <label>%</label>
+              </div>
+            </template>
+            <!-- Attachment -->
             <div item>
               <iron-icon icon="attachment" item-icon></iron-icon>
-              <nuxeo-file value="{{task.variables.file}}"></nuxeo-file>
+              <span>Attachment:</span>
+              <nuxeo-file value="{{task.variables.attachment}}"></nuxeo-file>
             </div>
           </template>
 
-          <!-- Accept / Reject -->
-          <template is="dom-if" if="[[isStep('accept',task)]]">
-            <div item>
-              <iron-icon icon="label" title="[[i18n('wf.travelExpenses.label')]]" item-icon></iron-icon>
-              <span>[[task.variables.label]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="credit-card" title="[[i18n('wf.travelExpenses.amount')]]" item-icon></iron-icon>
-              <span>[[task.variables.amount]]</span>
-              <label>&euro;</label>
-            </div>
-            <div item>
-              <iron-icon icon="description" title="[[i18n('wf.travelExpenses.description')]]" item-icon></iron-icon>
-              <span>[[task.variables.description]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="work" title="[[i18n('wf.travelExpenses.department')]]" item-icon></iron-icon>
-              <span>[[task.variables.department]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="store" title="[[i18n('wf.travelExpenses.nature')]]" item-icon></iron-icon>
-              <span>[[task.variables.expensenature]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="attachment" title="[[i18n('wf.travelExpenses.file')]]" item-icon></iron-icon>
-              <a href="[[task.variables.file.url]]" target="_blank">[[task.variables.file.name]]</a>
-            </div>
-          </template>
-
-          <!-- Accountancy -->
-          <template is="dom-if" if="[[isStep('accountancy',task)]]">
-            <div item>
-              <iron-icon icon="label" item-icon></iron-icon>
-              <span>[[task.variables.label]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="credit-card" item-icon></iron-icon>
-              <span>[[task.variables.amount]]</span>
-              <label>&euro;</label>
-            </div>
-            <div item>
-              <iron-icon icon="description" item-icon></iron-icon>
-              <span>[[task.variables.description]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="work" item-icon></iron-icon>
-              <span>[[task.variables.department]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="store" item-icon></iron-icon>
-              <span>[[task.variables.expensenature]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="label" item-icon></iron-icon>
-              <input value="{{task.variables.customer_code}}" placeholder="Customer code" required>
-            </div>
-            <div item>
-              <iron-icon icon="attachment" title="[[i18n('wf.travelExpenses.file')]]" item-icon></iron-icon>
-              <a href="[[task.variables.file.url]]" target="_blank">[[task.variables.file.name]]</a>
-            </div>
-          </template>
         </nx-task-list>
 
         <!-- Workflow List -->
-        <nx-workflow-list fit workflowModel="TravelExpenseValidation"></nx-workflow-list>
+        <nx-workflow-list fit workflowModel="EMDirectDepositRequest"></nx-workflow-list>
 
       </iron-pages>
 
     </paper-header-panel>
+
   </template>
 
   <!-- build:js vendor/jquery.js -->
@@ -190,6 +180,22 @@
   <script src="scripts/app.js"></script>
   <!-- endbuild-->
 
+  <script>
+    function clickHandler(e) {
+      var button = e.target;
+      while (!button.hasAttribute('data-dialog') && button !== document.body) {
+        button = button.parentElement;
+      }
+      if (!button.hasAttribute('data-dialog')) {
+        return;
+      }
+      var id = button.getAttribute('data-dialog');
+      var dialog = document.getElementById(id);
+      if (dialog) {
+        dialog.open();
+      }
+    }
+  </script>
 </body>
 
 </html>

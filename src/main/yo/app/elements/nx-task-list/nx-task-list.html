@@ -1,3 +1,19 @@
+<!--
+(C) Copyright 2015 Nuxeo SA (http://nuxeo.com/) and contributors.
+
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the GNU Lesser General Public License
+(LGPL) version 2.1 which accompanies this distribution, and is available at
+http://www.gnu.org/licenses/lgpl.html
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+
+Contributors:
+  Josh Fletcher <jfletcher@nuxeo.com>
+-->
 <dom-module id="nx-task-list">
 
   <link rel="import" type="css" href="nx-task-list.css">
@@ -26,8 +42,8 @@
               <paper-item-body two-line>
                 <div class="task-row">
                   <iron-icon icon="assignment"></iron-icon>
-                  <div class="task-name">Task: [[i18n(item.name)]]</div>
-                  <div class="task-subject">Account Type: [[item.variables.department]]</div>
+                  <div class="task-name">[[i18n(item.name)]]</div>
+                  <div class="task-subject">Account Type: [[item.variables.account-type]]</div>
                 </div>
                 <div secondary>
                   <iron-icon icon="schedule"></iron-icon>

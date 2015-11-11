@@ -16,9 +16,7 @@
   'use strict';
 
   var TASKS = {
-    'create': 'Task4fb',
-    'accept': 'Task12ef',
-    'accountancy': 'Task1431'
+    'create': 'Task7c8'
   };
 
   var app = document.querySelector('#app');
@@ -42,6 +40,10 @@
     return task && TASKS[key] === task.nodeName;
   };
 
+  app.isMatch = function (match, value) {
+    return match == value;
+  };
+
   HTMLImports.whenReady(function () {
     app.formatDate = Polymer.Base.formatDate = function (str) {
       return (str) ? new Date(str).toLocaleString() : '';
@@ -52,21 +54,18 @@
         'wf.actors': 'Actors',
         'wf.dueDate': 'Due date',
         'wf.directive': 'Directive,',
-        'wf.travelExpenseValidation': 'Travel expense validation',
-        'wf.travelExpenses.create': 'New request',
-        'wf.travelExpenses.validate': 'Validate expense',
-        'wf.travelExpenses.accountancy': 'Account for expense',
-        'wf.travelExpenses.submitExpense': 'Submit for validation',
-        'wf.travelExpenses.customerCode': 'Set customer code',
-        'wf.travelExpenses.submit': 'Submit',
-        'wf.travelExpenses.cancel': 'Cancel',
-        'wf.travelExpenses.done': 'Done',
-        'wf.travelExpenses.label': 'Label',
-        'wf.travelExpenses.amount': 'Amount',
-        'wf.travelExpenses.description': 'Description',
-        'wf.travelExpenses.nature': 'Nature',
-        'wf.travelExpenses.department': 'Department',
-        'wf.travelExpenses.file': 'File'
+        'wf.EMDirectDepositRequest': 'Direct Deposit Request',
+        'wf.directDeposit.create': 'New request',
+        'wf.directDeposit.validate': 'Validate expense',
+        'wf.directDeposit.accountancy': 'Account for expense',
+        'wf.directDeposit.submitExpense': 'Submit for validation',
+        'wf.directDeposit.customerCode': 'Set customer code',
+        'wf.directDeposit.submit': 'Submit',
+        'wf.directDeposit.cancel': 'Cancel',
+        'wf.directDeposit.done': 'Done',
+        'wf.directDeposit.label': 'Label',
+        'wf.directDeposit.amount': 'Amount',
+        'wf.directDeposit.file': 'File'
       }[key] || key;
     };
   });
