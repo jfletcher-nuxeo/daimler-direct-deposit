@@ -35,3 +35,27 @@ input {
 [item] > *:not(:first-child):not(:last-child) {
   margin-right: 16px;
 }
+
+.percentage {
+  width: 40px;
+}
+
+.accountNumber {
+  width: 85px;
+}
+
+
+/* This is for the image of a check shown from the HELP button.
+   The first class is for the div holding the image.
+   Adapted from http://stackoverflow.com/a/3380397
+*/
+
+.checkImage {
+  width: auto;
+  display: inline-block;
+}
+
+.checkImage img {
+  max-width: 100%;
+  height: auto;
+}
