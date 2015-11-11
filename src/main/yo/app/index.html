@@ -1,3 +1,19 @@
+<!--
+(C) Copyright 2015 Nuxeo SA (http://nuxeo.com/) and contributors.
+
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the GNU Lesser General Public License
+(LGPL) version 2.1 which accompanies this distribution, and is available at
+http://www.gnu.org/licenses/lgpl.html
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+
+Contributors:
+  Josh Fletcher <jfletcher@nuxeo.com>
+-->
 <!doctype html>
 <html lang="">
 
@@ -121,7 +137,7 @@
                 <iron-icon icon="account-balance-wallet" item-icon></iron-icon>
                 <span>Amount:</span>
                 <label>$</label>
-                <input is="iron-input" bind-value="{{task.variables.amount}}" type="number" step="0.01" required>
+                <input is="iron-input" bind-value="{{task.variables.deposit-amount}}" prevent-invalid-input allowed-pattern="[0-9]" required>
               </div>
             </template>
             <!-- Amount - % -->
@@ -129,7 +145,7 @@
               <div item>
                 <iron-icon icon="label" item-icon></iron-icon>
                 <span>Amount:</span>
-                <input class="percentage" is="iron-input" bind-value="{{task.variables.amount}}" type="number" required>
+                <input class="percentage" is="iron-input" bind-value="{{task.variables.deposit-amount}}" prevent-invalid-input allowed-pattern="[0-9]" required>
                 <label>%</label>
               </div>
             </template>
@@ -141,68 +157,6 @@
             </div>
           </template>
 
-
-          <!-- Accept / Reject -->
-          <template is="dom-if" if="[[isStep('accept',task)]]">
-            <div item>
-              <iron-icon icon="label" title="[[i18n('wf.directDeposit.label')]]" item-icon></iron-icon>
-              <span>[[task.variables.label]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="credit-card" title="[[i18n('wf.directDeposit.amount')]]" item-icon></iron-icon>
-              <span>[[task.variables.amount]]</span>
-              <label>&euro;</label>
-            </div>
-            <div item>
-              <iron-icon icon="description" title="[[i18n('wf.directDeposit.description')]]" item-icon></iron-icon>
-              <span>[[task.variables.description]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="work" title="[[i18n('wf.directDeposit.department')]]" item-icon></iron-icon>
-              <span>[[task.variables.department]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="store" title="[[i18n('wf.directDeposit.nature')]]" item-icon></iron-icon>
-              <span>[[task.variables.expensenature]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="attachment" title="[[i18n('wf.directDeposit.file')]]" item-icon></iron-icon>
-              <a href="[[task.variables.file.url]]" target="_blank">[[task.variables.file.name]]</a>
-            </div>
-          </template>
-
-          <!-- Accountancy -->
-          <template is="dom-if" if="[[isStep('accountancy',task)]]">
-            <div item>
-              <iron-icon icon="label" item-icon></iron-icon>
-              <span>[[task.variables.label]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="credit-card" item-icon></iron-icon>
-              <span>[[task.variables.amount]]</span>
-              <label>&euro;</label>
-            </div>
-            <div item>
-              <iron-icon icon="description" item-icon></iron-icon>
-              <span>[[task.variables.description]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="work" item-icon></iron-icon>
-              <span>[[task.variables.department]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="store" item-icon></iron-icon>
-              <span>[[task.variables.expensenature]]</span>
-            </div>
-            <div item>
-              <iron-icon icon="label" item-icon></iron-icon>
-              <input value="{{task.variables.customer_code}}" placeholder="Customer code" required>
-            </div>
-            <div item>
-              <iron-icon icon="attachment" title="[[i18n('wf.directDeposit.file')]]" item-icon></iron-icon>
-              <a href="[[task.variables.file.url]]" target="_blank">[[task.variables.file.name]]</a>
-            </div>
-          </template>
         </nx-task-list>
 
         <!-- Workflow List -->
@@ -211,6 +165,7 @@
       </iron-pages>
 
     </paper-header-panel>
+
   </template>
 
   <!-- build:js vendor/jquery.js -->
@@ -224,7 +179,6 @@
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
   <!-- endbuild-->
-
 
   <script>
     function clickHandler(e) {
