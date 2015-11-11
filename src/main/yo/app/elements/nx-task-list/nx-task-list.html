@@ -40,14 +40,25 @@ Contributors:
           <template>
             <paper-item class="item" on-tap="select">
               <paper-item-body two-line>
-                <div class="task-row">
-                  <iron-icon icon="assignment"></iron-icon>
-                  <div class="task-name">[[i18n(item.name)]]</div>
-                  <div class="task-subject">Account Type: [[item.variables.account-type]]</div>
+                <div>
+                  <span>[[i18n(item.name)]]</span>
                 </div>
                 <div secondary>
-                  <iron-icon icon="schedule"></iron-icon>
-                  <span>Due Date: [[formatDate(item.dueDate)]]</span>
+                  <iron-icon icon="account-balance"></iron-icon>
+                  <span>Account Type: [[item.variables.account-type]]</span>
+                  <iron-icon icon="b"></iron-icon>
+                  <span>Deposit Type: [[item.variables.deposit-type]]</span>
+                  <iron-icon icon="b" item-icon></iron-icon>
+                  <!-- Amount - $ -->
+                  <template is="dom-if" if="[[_isMatch('amount',item.variables.deposit-type)]]">
+                    <span>Amount: </span>
+                    <label>$</label><span>[[item.variables.deposit-amount ]]</span>
+                  </template>
+                  <!-- Amount - % -->
+                  <template is="dom-if" if="[[_isMatch('percent',item.variables.deposit-type)]]">
+                    <span>Amount: </span><span>[[item.variables.deposit-amount ]] </span>
+                    <label>%</label>
+                  </template>
                 </div>
               </paper-item-body>
               <paper-icon-button icon="delete" on-tap="deleteWorkflow"></paper-icon-button>
@@ -74,116 +85,119 @@ Contributors:
   </template>
 </dom-module>
 <script>
-  (function () {
-    Polymer({
-      is: 'nx-task-list',
+  Polymer({
+    is: 'nx-task-list',
 
-      properties: {
-        page: {
-          value: 0
-        },
-        task: {
-          notify: true,
-          observer: 'taskChanged'
-        },
-        tasks: {
-          type: Array,
-          value: []
-        },
-        workflowInstance: {
-          notify: true,
-          observer: 'workflowInstanceChanged'
-        },
-        workflowInstanceId: {
-          type: String,
-          value: ''
-        },
-        workflowModel: {
-          notify: true
-        }
+    properties: {
+      page: {
+        value: 0
       },
+      task: {
+        notify: true,
+        observer: 'taskChanged'
+      },
+      tasks: {
+        type: Array,
+        value: []
+      },
+      workflowInstance: {
+        notify: true,
+        observer: 'workflowInstanceChanged'
+      },
+      workflowInstanceId: {
+        type: String,
+        value: ''
+      },
+      workflowModel: {
+        notify: true
+      }
+    },
 
-      ready: function () {
+    ready: function () {
+      this.updateTasks();
+    },
+
+    select: function (e) {
+      this.task = e.model.item;
+    },
+
+    taskChanged: function (task) {
+      if (task) {
+        this.$.task.path = '/task/' + task.id;
+      } else {
         this.updateTasks();
-      },
+      }
+      this.page = (task) ? 1 : 0;
+    },
 
-      select: function (e) {
-        this.task = e.model.item;
-      },
+    // TODO : check if there's a fix for databinding to a content selector
+    taskSelector: function (task) {
+      return (task) ? '.' + task.nodeName : '';
+    },
 
-      taskChanged: function (task) {
-        if (task) {
-          this.$.task.path = '/task/' + task.id;
-        } else {
-          this.updateTasks();
-        }
-        this.page = (task) ? 1 : 0;
-      },
+    newEntry: function () {
+      this.workflowInstance = {
+        'entity-type': 'workflow',
+        workflowModelName: this.workflowModel
+      };
+      this.$.workflow.post()
+        // get the task for the new workflow instance
+        .then(function (response) {
+          this.$.createdMessage.show();
+          this.async(this.goToNextWorkflowTask);
+        }.bind(this));
+    },
 
-      // TODO : check if there's a fix for databinding to a content selector
-      taskSelector: function (task) {
-        return (task) ? '.' + task.nodeName : '';
-      },
+    goToNextWorkflowTask: function () {
+      this.$.workflowTasks.get()
+        // set the current task to our first if any
+        .then(function (response) {
+          if (response.entries.length) {
+            this.task = response.entries[response.entries.length - 1];
+          } else {
+            this.task = null;
+            this.updateTasks();
+          }
+        }.bind(this));
+    },
 
-      newEntry: function () {
+    updateTasks: function () {
+      this.$.tasks.get().then(function (data) {
+        this.tasks = data.entries;
+      }.bind(this));
+    },
+
+    deleteWorkflow: function (e, model) {
+      e.preventDefault();
+      e.stopPropagation();
+      var doDelete = window.confirm('Are you sure you want to delete ?');
+      if (doDelete) {
         this.workflowInstance = {
           'entity-type': 'workflow',
-          workflowModelName: this.workflowModel
+          'id': event.model.item.workflowInstanceId
         };
-        this.$.workflow.post()
-          // get the task for the new workflow instance
-          .then(function (response) {
-            this.$.createdMessage.show();
-            this.async(this.goToNextWorkflowTask);
-          }.bind(this));
-      },
-
-      goToNextWorkflowTask: function () {
-        this.$.workflowTasks.get()
-          // set the current task to our first if any
-          .then(function (response) {
-            if (response.entries.length) {
-              this.task = response.entries[0];
-            } else {
-              this.task = null;
-              this.updateTasks();
-            }
-          }.bind(this));
-      },
-
-      updateTasks: function () {
-        this.$.tasks.get().then(function (data) {
-          this.tasks = data.entries;
+        this.$.workflow.remove().then(function () {
+          this.$.deletedMessage.show();
+          this.updateTasks();
         }.bind(this));
-      },
-
-      deleteWorkflow: function (e, model) {
-        e.preventDefault();
-        e.stopPropagation();
-        var doDelete = window.confirm('Are you sure you want to delete ?');
-        if (doDelete) {
-          this.workflowInstance = {
-            'entity-type': 'workflow',
-            'id': event.model.item.workflowInstanceId
-          };
-          this.$.workflow.remove().then(function () {
-            this.$.deletedMessage.show();
-            this.updateTasks();
-          }.bind(this));
-        }
-        return false;
-      },
-
-      tasksParams: function (workflowModel) {
-        return '{"workflowModelName": "' + workflowModel + '"}';
-      },
-
-      workflowInstanceChanged: function (workflowInstance) {
-        this.$.workflow.path = '/workflow/' + ((workflowInstance.id) ? workflowInstance.id : '');
-        this.$.workflowTasks.params = {
-          workflowInstanceId: workflowInstance.id
-        };
       }
-    });
-  }());
+      return false;
+    },
+
+    tasksParams: function (workflowModel) {
+      return '{"workflowModelName": "' + workflowModel + '"}';
+    },
+
+    workflowInstanceChanged: function (workflowInstance) {
+      this.$.workflow.path = '/workflow/' + ((workflowInstance.id) ? workflowInstance.id : '');
+      this.$.workflowTasks.params = {
+        workflowInstanceId: workflowInstance.id
+      };
+    },
+
+    _isMatch: function (match, value) {
+      return match == value;
+    }
+
+  });
 </script>
