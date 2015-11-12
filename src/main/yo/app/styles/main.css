@@ -23,7 +23,6 @@ input {
 }
 
 [item] {
-  border: 1px solid #ddd;
   margin: 10px;
   height: 40px;
 }
@@ -32,16 +31,23 @@ input {
   width: 56px;
 }
 
-[item] > *:not(:first-child):not(:last-child) {
-  margin-right: 16px;
+.fieldLabel {
+  width: 120px;
 }
 
 .percentage {
+  border: 1px solid #ddd;
   width: 40px;
 }
 
 .accountNumber {
+  border: 1px solid #ddd;
   width: 85px;
+}
+
+.amount {
+  border: 1px solid #ddd;
+  width: 60px;
 }
 
 

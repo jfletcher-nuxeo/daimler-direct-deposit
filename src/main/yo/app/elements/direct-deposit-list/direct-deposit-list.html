@@ -44,43 +44,6 @@ Contributors:
 
 <script>
   Polymer({
-    is: 'direct-deposit-list',
-
-    properties: {
-      document: {
-        notify: true,
-        observer: 'documentChanged'
-      },
-      documents: {
-        value: []
-      }
-    },
-
-    ready: function () {
-      this.documentChanged();
-      this.updateDocuments();
-    },
-
-    select: function (e, detail) {
-      this.document = detail.data;
-    },
-
-
-
-    updateDocuments: function () {
-      this.document = null;
-      this.$.doclist.fetch();
-
-    },
-
-    documentChanged: function () {
-      //this.$.doclist.path = '/hr/' + ((this.document) ? this.document.id : '');
-    },
-
-    _debug(data) {
-      var temp;
-      debugger;
-    }
-
+    is: 'direct-deposit-list'
   });
 </script>
