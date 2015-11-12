@@ -30,12 +30,14 @@ Contributors:
       <iron-list id="list" items="[[theDocs]]" as="item" on-iron-select="select">
         <template>
           <paper-icon-item class="item">
-            <iron-icon icon="group-work" item-icon></iron-icon>
-            <span>[[item.title]]</span>
-            <span class="workflow-initiator">[[item.properties.dc:creator]]</span>
-            <span>State</span>
+            <iron-icon icon="account-balance" item-icon></iron-icon>
+            <span>[[item.title]]</span><span>&nbsp;for employee&nbsp;</span><span class="flex">[[item.properties.dc:creator]]</span>
+            <span>Status</span>
             <template is="dom-if" if="[[isMatch('Closed',item.state)]]">
-              <span id="requestState" class="stateClosed">[[item.state]]</span>
+              <span id="requestState" class="state stateClosed">Approved</span>
+            </template>
+            <template is="dom-if" if="[[isMatch('Open',item.state)]]">
+              <span id="requestState" class="state">Pending</span>
             </template>
           </paper-icon-item>
         </template>
