@@ -53,6 +53,10 @@ Contributors:
     #logo-toolbar {
       background-color: #ffffff;
     }
+
+    paper-button {
+      min-width: 0px;
+    }
   </style>
 </head>
 
@@ -89,7 +93,7 @@ Contributors:
             <!-- Account Type -->
             <div item>
               <iron-icon icon="account-balance" item-icon></iron-icon>
-              <span>Account Type:</span>
+              <span class="fieldLabel">Account Type</span>
               <select value="{{task.variables.account-type::change}}">
                 <option value="checking">Checking</option>
                 <option value="savings">Savings</option>
@@ -97,8 +101,8 @@ Contributors:
             </div>
             <!-- Routing Number -->
             <div item>
-              <iron-icon icon="label" item-icon></iron-icon>
-              <span>Routing Number:</span>
+              <iron-icon icon="b" item-icon></iron-icon>
+              <span class="fieldLabel">Routing Number</span>
               <input class="accountNumber" is="iron-input" bind-value="{{task.variables.routing-number}}" placeholder="123456789" prevent-invalid-input allowed-pattern="[0-9]" required>
               <section onclick="clickHandler(event)">
                 <paper-button data-dialog="animated">help</paper-button>
@@ -110,8 +114,8 @@ Contributors:
             </div>
             <!-- Account Number -->
             <div item>
-              <iron-icon icon="label" item-icon></iron-icon>
-              <span>Account Number:</span>
+              <iron-icon icon="b" item-icon></iron-icon>
+              <span class="fieldLabel">Account Number</span>
               <input class="accountNumber" is="iron-input" bind-value="{{task.variables.account-number}}" placeholder="0123456789" prevent-invalid-input allowed-pattern="[0-9]" required>
               <section onclick="clickHandler(event)">
                 <paper-button data-dialog="animated">help</paper-button>
@@ -123,8 +127,8 @@ Contributors:
             </div>
             <!-- Deposit Type -->
             <div item>
-              <iron-icon icon="a" item-icon></iron-icon>
-              <span>Deposit Type:</span>
+              <iron-icon icon="b" item-icon></iron-icon>
+              <span class="fieldLabel">Deposit Type</span>
               <select value="{{task.variables.deposit-type::change}}">
                 <option value="balance">Balance</option>
                 <option value="amount">Amount</option>
@@ -134,17 +138,17 @@ Contributors:
             <!-- Amount - $ -->
             <template is="dom-if" if="[[isMatch('amount',task.variables.deposit-type)]]">
               <div item>
-                <iron-icon icon="account-balance-wallet" item-icon></iron-icon>
-                <span>Amount:</span>
+                <iron-icon icon="b" item-icon></iron-icon>
+                <span class="fieldLabel">Amount</span>
                 <label>$</label>
-                <input is="iron-input" bind-value="{{task.variables.deposit-amount}}" prevent-invalid-input allowed-pattern="[0-9]" required>
+                <input class="amount" is="iron-input" bind-value="{{task.variables.deposit-amount}}" placeholder="0000.00" prevent-invalid-input allowed-pattern="[0-9.]" required>
               </div>
             </template>
             <!-- Amount - % -->
             <template is="dom-if" if="[[isMatch('percent',task.variables.deposit-type)]]">
               <div item>
-                <iron-icon icon="label" item-icon></iron-icon>
-                <span>Amount:</span>
+                <iron-icon icon="b" item-icon></iron-icon>
+                <span class="fieldLabel">Amount</span>
                 <input class="percentage" is="iron-input" bind-value="{{task.variables.deposit-amount}}" prevent-invalid-input allowed-pattern="[0-9]" required>
                 <label>%</label>
               </div>
@@ -152,7 +156,7 @@ Contributors:
             <!-- Attachment -->
             <div item>
               <iron-icon icon="attachment" item-icon></iron-icon>
-              <span>Attachment:</span>
+              <span class="fieldLabel">Attachment</span>
               <nuxeo-file value="{{task.variables.attachment}}"></nuxeo-file>
             </div>
           </template>
