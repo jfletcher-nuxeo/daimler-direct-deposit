@@ -1,6 +1,8 @@
 # About Daimler Direct Deposit Demo
 
-This sample demonstrates usage of the Workflow REST API.
+This sample demonstrates usage of the Workflow REST API as well as nuxeo-elements.
+
+Adapted from the nuxeo-travel-expenses sample.
 
 # Building
 
