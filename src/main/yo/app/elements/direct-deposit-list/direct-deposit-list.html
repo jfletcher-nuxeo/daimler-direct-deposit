@@ -32,8 +32,11 @@ Contributors:
           <paper-icon-item class="item">
             <iron-icon icon="group-work" item-icon></iron-icon>
             <span>[[item.title]]</span>
-            <span class="flex workflow-initiator">[[item.initiator]]</span>
-            <div class="state">[[item.state]]</div>
+            <span class="workflow-initiator">[[item.properties.dc:creator]]</span>
+            <span>State</span>
+            <template is="dom-if" if="[[isMatch('Closed',item.state)]]">
+              <span id="requestState" class="stateClosed">[[item.state]]</span>
+            </template>
           </paper-icon-item>
         </template>
       </iron-list>
@@ -44,6 +47,16 @@ Contributors:
 
 <script>
   Polymer({
-    is: 'direct-deposit-list'
+    is: 'direct-deposit-list',
+
+    isMatch: function (match, value) {
+      return match == value;
+    },
+
+    _debug: function (data) {
+      var foo;
+      debugger;
+    }
+
   });
 </script>
