@@ -12,8 +12,12 @@
 
 .state {
   text-transform: uppercase;
-  color: gray;
+  color: orange;
   padding: 5px;
+}
+
+.stateClosed {
+  color: green;
 }
 
 .item {
