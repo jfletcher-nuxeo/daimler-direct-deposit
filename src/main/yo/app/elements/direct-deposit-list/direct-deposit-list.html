@@ -1,0 +1,86 @@
+<!--
+(C) Copyright 2015 Nuxeo SA (http://nuxeo.com/) and contributors.
+
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the GNU Lesser General Public License
+(LGPL) version 2.1 which accompanies this distribution, and is available at
+http://www.gnu.org/licenses/lgpl.html
+
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+Lesser General Public License for more details.
+
+Contributors:
+  Josh Fletcher <jfletcher@nuxeo.com>
+-->
+<dom-module id="direct-deposit-list">
+
+  <link rel="import" type="css" href="direct-deposit-list.css">
+
+  <template>
+
+    <!-- The list of all Direct Deposit HR Requests for the current workflow model -->
+    <nuxeo-page-provider auto id="doclist" query="SELECT * FROM Document WHERE ecm:primaryType = 'HRRequest'" current-page={{theDocs}}>
+    </nuxeo-page-provider>
+
+    <div id="list">
+
+      <!-- List of documents -->
+      <iron-list id="list" items="[[theDocs]]" as="item" on-iron-select="select">
+        <template>
+          <paper-icon-item class="item">
+            <iron-icon icon="group-work" item-icon></iron-icon>
+            <span>[[item.title]]</span>
+            <span class="flex workflow-initiator">[[item.initiator]]</span>
+            <div class="state">[[item.state]]</div>
+          </paper-icon-item>
+        </template>
+      </iron-list>
+    </div>
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'direct-deposit-list',
+
+    properties: {
+      document: {
+        notify: true,
+        observer: 'documentChanged'
+      },
+      documents: {
+        value: []
+      }
+    },
+
+    ready: function () {
+      this.documentChanged();
+      this.updateDocuments();
+    },
+
+    select: function (e, detail) {
+      this.document = detail.data;
+    },
+
+
+
+    updateDocuments: function () {
+      this.document = null;
+      this.$.doclist.fetch();
+
+    },
+
+    documentChanged: function () {
+      //this.$.doclist.path = '/hr/' + ((this.document) ? this.document.id : '');
+    },
+
+    _debug(data) {
+      var temp;
+      debugger;
+    }
+
+  });
+</script>
