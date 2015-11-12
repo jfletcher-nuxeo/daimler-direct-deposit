@@ -19,188 +19,51 @@ Contributors:
 
 <head>
   <meta charset="utf-8">
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#03a9f4">
 
-  <title>Daimler Direct Deposit Request</title>
+  <title>Daimler Employee Portal</title>
 
   <link rel="icon" sizes="192x192" href="icon.png">
 
-  <!-- build:css styles/main.css -->
-  <link rel="stylesheet" href="styles/main.css">
-  <!-- endbuild-->
 
-  <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
-  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <!-- endbuild -->
 
-  <!-- build:vulcanized elements/elements.vulcanized.html -->
-  <link rel="import" href="elements/elements.html">
-  <!-- endbuild-->
+  <style>
+    a:link {
+      text-decoration: none;
+    }
 
-  <style is="custom-style">
-    #logo {
-      background: transparent url('images/logo.gif') no-repeat;
+    a:visited {
+      color: #2e649f;
+    }
+
+    .portal {
+      background: transparent url('images/portal.png') no-repeat;
       background-size: cover;
       display: inline-block;
-      height: 18px;
-      width: 308px;
+      width: 1122px;
+      height: 692px;
     }
 
-    #logo-toolbar {
-      background-color: #ffffff;
+    .directDepositLink {
+      position: absolute;
+      left: 49px;
+      top: 327px;
+      background-color: white;
+      padding: 5px;
     }
 
-    paper-button {
-      min-width: 0px;
+    .fakeLink {
+      font-family: arial;
+      font-size: 90%;
     }
   </style>
 </head>
 
 <body unresolved class="fullbleed layout vertical">
 
-  <template is="dom-bind" id="app">
+  <div class="portal">
+    <div class="directDepositLink"><a href="direct-deposit.html"><span class="fakeLink">Direct Deposit</span></a></div>
+  </div>
 
-    <nuxeo-connection url="/nuxeo"></nuxeo-connection>
-
-    <paper-header-panel flex>
-
-      <paper-toolbar id="logo-toolbar">
-        <div id="logo"></div>
-      </paper-toolbar>
-
-      <paper-toolbar class="medium-tall">
-        <paper-icon-button icon="[[toolbarIcon(task)]]" on-tap="back"></paper-icon-button>
-        <div class="title">[[toolbarTitle(task)]]</div>
-        <paper-icon-button icon="refresh" on-tap="refresh"></paper-icon-button>
-        <paper-tabs selected="{{selectedTab}}" valueattr="path" class="fit bottom">
-          <paper-tab>NEW REQUESTS</paper-tab>
-          <paper-tab>SUBMITTED REQUESTS</paper-tab>
-        </paper-tabs>
-      </paper-toolbar>
-
-      <iron-pages selected="[[selectedTab]]">
-
-        <!-- Task List -->
-        <nx-task-list class="fit" workflow-model="EMDirectDepositRequest" task="{{task}}">
-
-
-          <!-- Create -->
-          <template is="dom-if" if="[[isStep('create',task)]]">
-            <!-- Account Type -->
-            <div item>
-              <iron-icon icon="account-balance" item-icon></iron-icon>
-              <span class="fieldLabel">Account Type</span>
-              <select value="{{task.variables.account-type::change}}">
-                <option value="checking">Checking</option>
-                <option value="savings">Savings</option>
-              </select>
-            </div>
-            <!-- Routing Number -->
-            <div item>
-              <iron-icon icon="b" item-icon></iron-icon>
-              <span class="fieldLabel">Routing Number</span>
-              <input class="accountNumber" is="iron-input" bind-value="{{task.variables.routing-number}}" placeholder="123456789" prevent-invalid-input allowed-pattern="[0-9]" required>
-              <section onclick="clickHandler(event)">
-                <paper-button data-dialog="animated">help</paper-button>
-                <paper-dialog id="animated" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
-                  <h2>Check Sample</h2>
-                  <div class="checkImage"><img src="images/check.png"></div>
-                </paper-dialog>
-              </section>
-            </div>
-            <!-- Account Number -->
-            <div item>
-              <iron-icon icon="b" item-icon></iron-icon>
-              <span class="fieldLabel">Account Number</span>
-              <input class="accountNumber" is="iron-input" bind-value="{{task.variables.account-number}}" placeholder="0123456789" prevent-invalid-input allowed-pattern="[0-9]" required>
-              <section onclick="clickHandler(event)">
-                <paper-button data-dialog="animated">help</paper-button>
-                <paper-dialog id="animated" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
-                  <h2>Check Sample</h2>
-                  <img src="images/check.png">
-                </paper-dialog>
-              </section>
-            </div>
-            <!-- Deposit Type -->
-            <div item>
-              <iron-icon icon="b" item-icon></iron-icon>
-              <span class="fieldLabel">Deposit Type</span>
-              <select value="{{task.variables.deposit-type::change}}">
-                <option value="balance">Balance</option>
-                <option value="amount">Amount</option>
-                <option value="percent">Percentage</option>
-              </select>
-            </div>
-            <!-- Amount - $ -->
-            <template is="dom-if" if="[[isMatch('amount',task.variables.deposit-type)]]">
-              <div item>
-                <iron-icon icon="b" item-icon></iron-icon>
-                <span class="fieldLabel">Amount</span>
-                <label>$</label>
-                <input class="amount" is="iron-input" bind-value="{{task.variables.deposit-amount}}" placeholder="0000.00" prevent-invalid-input allowed-pattern="[0-9.]" required>
-              </div>
-            </template>
-            <!-- Amount - % -->
-            <template is="dom-if" if="[[isMatch('percent',task.variables.deposit-type)]]">
-              <div item>
-                <iron-icon icon="b" item-icon></iron-icon>
-                <span class="fieldLabel">Amount</span>
-                <input class="percentage" is="iron-input" bind-value="{{task.variables.deposit-amount}}" prevent-invalid-input allowed-pattern="[0-9]" required>
-                <label>%</label>
-              </div>
-            </template>
-            <!-- Attachment -->
-            <div item>
-              <iron-icon icon="attachment" item-icon></iron-icon>
-              <span class="fieldLabel">Attachment</span>
-              <nuxeo-file value="{{task.variables.attachment}}"></nuxeo-file>
-            </div>
-          </template>
-
-        </nx-task-list>
-
-        <!-- document List -->
-        <direct-deposit-list fit>
-        </direct-deposit-list>
-
-      </iron-pages>
-
-    </paper-header-panel>
-
-  </template>
-
-  <!-- build:js vendor/jquery.js -->
-  <script src="bower_components/jquery/dist/jquery.js"></script>
-  <!-- endbuild-->
-
-  <!-- build:js vendor/moment.js -->
-  <script src="bower_components/moment/min/moment-with-locales.js"></script>
-  <!-- endbuild-->
-
-  <!-- build:js scripts/app.js -->
-  <script src="scripts/app.js"></script>
-  <!-- endbuild-->
-
-  <script>
-    function clickHandler(e) {
-      var button = e.target;
-      while (!button.hasAttribute('data-dialog') && button !== document.body) {
-        button = button.parentElement;
-      }
-      if (!button.hasAttribute('data-dialog')) {
-        return;
-      }
-      var id = button.getAttribute('data-dialog');
-      var dialog = document.getElementById(id);
-      if (dialog) {
-        dialog.open();
-      }
-    }
-  </script>
 </body>
 
 </html>
